@@ -1,5 +1,5 @@
 """
-Flask server application for Emotion Detection.
+Flask server application for Emotion Detection with Error Handling.
 """
 from flask import Flask, render_template, request
 from EmotionDetection.emotion_detection import emotion_detector
@@ -10,10 +10,14 @@ app = Flask("Emotion Detector")
 def sent_analyzer():
     """
     Route that receives text, calls emotion_detector,
-    and returns formatted output.
+    and returns formatted output or error message.
     """
     text_to_analyze = request.args.get('textToAnalyze')
     response = emotion_detector(text_to_analyze)
+    
+    # Task 7: Error handling for None dominant_emotion
+    if response['dominant_emotion'] is None:
+        return "Invalid text! Please try again!"
     
     return (
         f"For the given statement, the system response is "
